@@ -4,7 +4,7 @@
 #include <stdarg.h>
 /**
  * _printf - function that produces an output according format
- * @format: string to be formatted
+ * @format: string to format.
  * Return: number of char printed
  */
 int _printf(const char *format, ...)
