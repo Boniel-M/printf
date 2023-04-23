@@ -1,45 +1,73 @@
 #include <stdarg.h>
 #include <stdio.h>
-#include <main.h>
 /**
- * _printf - Prints a formatted string to the standard output stream
- * @format: A pointer to a string to be printed
- *          to the standard output stream
+ * _printf - prints a formatted output
+ * @format: the format string
  *
- * Return: The number of characters printed
+ * Return: number of characters printed, or -1 on error.
  */
 int _printf(const char *format, ...)
 {
 	va_list args;
-	
-	int printed_chars = 0;
-	
+	int count = 0;
+
 	va_start(args, format);
-	
-	while (*format != '\0')
+
+	while (*format)
 	{
-		if (*format != '%')
+		if (*format == '%')
 		{
-			putchar(*format);
-			printed_chars++;
+			format++;
+
+			if (*format == 'c')
+			{
+				char c = (char) va_arg(args, int);
+
+				putchar(c);
+				count++;
+			}
+			else if (*format == 's')
+			{
+				char *str = va_arg(args, char *);
+
+				while (*str)
+				{
+					putchar(*str);
+					count++;
+					str++;
+				}
+			}
+			else if (*format == '%')
+			{
+				putchar('%');
+				count++;
+			}
+			else
+			{
+				return (-1);
+			}
 		}
 		else
 		{
-			format++;
-			switch (*format)
-			{
-				case 'd':
-				case 'i':
-					printed_chars += printf("%d", va_arg(args, int));
-					break;
-				default:
-					putchar(*format);
-					printed_chars++;
-					break;
-			}
+			putchar(*format);
+			count++;
 		}
 		format++;
 	}
 	va_end(args);
-	return (printed_chars);
+	return (count);
+}
+#include <stdio.h>
+/**
+ * main - Entry Point
+ *
+ * Return: 0 always
+ */
+int main(void)
+{
+	int count;
+
+	count = _printf("Hello, %s! The answer is %d.\n", "world", 42);
+	printf("Characters printed: %d\n", count);
+	return 0;
 }
