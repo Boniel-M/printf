@@ -9,7 +9,7 @@
  */
 int main(void)
 {
-	int c = 21;
+	int c = 295;
 	char *str = "BonielChemu";
 
 	printf("%d\n", c);
