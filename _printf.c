@@ -57,3 +57,17 @@ int _printf(const char *format, ...)
 	va_end(args);
 	return (count);
 }
+#include <stdio.h>
+/**
+ * main - Entry Point
+ *
+ * Return: 0 always
+ */
+int main(void)
+{
+	int count;
+
+	count = _printf("Hello, %s! The answer is %d.\n", "world", 42);
+	printf("Characters printed: %d\n", count);
+	return 0;
+}
