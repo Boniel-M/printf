@@ -7,6 +7,10 @@
  * @format: string to format.
  * Return: number of char printed
  */
+int _putchar(char c)
+{
+	return (putchar(c));
+}
 int _printf(const char *format, ...)
 {
 	va_list args;
