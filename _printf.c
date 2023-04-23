@@ -11,43 +11,44 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 
-	int counter = 0;
+	int count = 0;
 	char c;
-	char *s;
 
 	va_start(args, format);
 
-	while (*format != '\0')
+	while ((c = *format++))
 	{
-		if (*format == '%')
+		if (c == '%')
 		{
-			format++;
-
-			if (*format == 'c')
+			c = *format++;
+			if (c == 'c')
 			{
-				c = (char) va_arg(args, int);
-				putchar(c);
-				counter++;
+				count += putchar(va_arg(args, int));
 			}
-			else if (*format == 's')
+			else if (c == 's')
 			{
-				s = va_arg(args, char *);
-				puts(s);
-				counter += strlen(s);
+				char *str = va_arg(args, char *);
+				
+				while (*str)
+				{
+					count += putchar(*str++);
+				}
 			}
-			else if (*format == '%')
+			else if (c == '%')
 			{
-				putchar('%');
-				counter++;
+				count += putchar('%');
 			}
 			else
 			{
-				putchar(*format);
-				counter++;
+				count += putchar('%');
+				count += putchar(c);
 			}
-			format++;
+		}
+		else
+		{
+			count += putchar(c);
 		}
 	}
 	va_end(args);
-	return (counter);
+	return count;
 }
