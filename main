@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main() {
+    int a = 42;
+    printf("Hello, world!\n");
+    printf("The value of a is %d\n", a);
+    return 0;
+}
