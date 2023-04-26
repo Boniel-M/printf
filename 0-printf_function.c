@@ -3,48 +3,53 @@
 #include "main.h"
 
 /**
- * _printf - prints output according to a format
+ * The `_printf()` function formats and prints data to the standard output stream
  *
- * @format: a character string containing zero or more directives
- * Return: the number of characters printed (excluding the null byte used to end output to strings)
+ * @param format - The format string that contains zero or more directives
+ * @param ... - The optional arguments to be formatted
+ * @return The number of characters printed (excluding the null byte used to end output to strings)
  *
- * This function prints output according to a format string that may contain zero
- * or more directives. The format string is composed of zero or more characters,
- * which may include conversion specifiers beginning with % character.
- * Supported conversion specifiers are %c, %s, and %%.
+ * The format string can contain conversion specifiers:
+ * - %c - Character
+ * - %s - String
+ * - %% - Percent character
  *
- * For %c, the function prints a single character passed as an integer argument.
- * For %s, the function prints a string argument.
- * For %%, the function prints a literal % character.
- *
- * @format may also contain other characters that are printed verbatim.
- * The function returns the total number of characters printed (excluding the
- * null byte used to end output to strings).
- *
- * The function does not handle field width, precision, or length modifiers.
- * It uses variable arguments, as indicated by the use of stdarg.h and the va_
- * functions.
+ * Unsupported conversion specifiers will result in undefined behavior.
+ * Field width and precision are not supported in this implementation.
  */
-int _printf(const char *format, ...)
-{
-    va_list args;
-
+int _printf(const char *format, ...) {
     int count = 0;
+    va_list args;
     va_start(args, format);
-
     while (*format != '\0') {
         if (*format == '%') {
             format++;
             switch (*format) {
-                case 'c':
-                    count += printf("%c", va_arg(args, int));
+                case 'c': {
+                    char c = (char) va_arg(args, int);
+                    putchar(c);
+                    count++;
                     break;
-                case 's':
-                    count += printf("%s", va_arg(args, char*));
+                }
+                case 's': {
+                    const char *s = va_arg(args, const char *);
+                    while (*s != '\0') {
+                        putchar(*s);
+                        s++;
+                        count++;
+                    }
                     break;
-                case '%':
-                    count += printf("%%");
+                }
+                case '%': {
+                    putchar('%');
+                    count++;
                     break;
+                }
+                default: {
+                    /* unsupported conversion specifier */
+                    va_end(args);
+                    return (-1);
+                }
             }
         } else {
             putchar(*format);
@@ -53,5 +58,16 @@ int _printf(const char *format, ...)
         format++;
     }
     va_end(args);
-    return count;
+    return (count);
+}
+
+int main() {
+    int num_chars;
+    num_chars = _printf("Testing _printf() function in C\n");
+    num_chars = _printf("Character: %c\n", 'a');
+    num_chars = _printf("String: %s\n", "Hello, world!");
+    num_chars = _printf("Percent sign: %%\n");
+    num_chars = _printf("The number of characters printed is: %d\n", 42);
+    num_chars = _printf("The total number of characters printed is: %d\n", num_chars);
+    return (0);
 }
