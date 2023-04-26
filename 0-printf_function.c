@@ -1,69 +1,77 @@
+#include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include "common_functions.h"
 #include "main.h"
-#include <stdio.h>
-
 /**
- * print_string - Prints a string.
- * @str: The string to print.
+ * _printf - Custom implementation of printf function
  *
- * Return: The number of characters printed.
- */
-int print_string(char *str)
-{
-    int len = 0;
-    while (*str)
-    {
-        putchar(*str++);
-        len++;
-    }
-    return len;
-}
-
-/**
- * _printf - Prints a formatted string.
- * @format: The format string to print.
+ * @format: Format string
  *
- * Return: The number of characters printed.
- */
+ * @...: Variable argument list
+ * Return: Number of characters printed
+*/
 int _printf(const char *format, ...)
 {
-    va_list args;
-    int len = 0;
-    va_start(args, format);
-    while (*format)
-    {
-        if (*format == '%')
-        {
-            format++;
-            switch (*format)
-            {
-                case 'c':
-                    putchar(va_arg(args, int));
-                    len++;
-                    break;
-                case 's':
-                    len += print_string(va_arg(args, char *));
-                    break;
-                case '%':
-                    putchar('%');
-                    len++;
-                    break;
-                default:
-                    putchar('%');
-                    putchar(*format);
-                    len += 2;
-                    break;
-            }
-        }
-        else
-        {
-            putchar(*format);
-            len++;
-        }
-        format++;
-    }
-    va_end(args);
-    return len;
-}
+	va_list args;
 
+	int count = 0;
+	char c;
+
+	va_start(args, format);
+
+	while ((c = *format++))
+	{
+		if (c == '%')
+		{
+			char specifier = *format++;
+
+			switch (specifier)
+			{
+				case 'c':
+					{
+						char arg_c = (char) va_arg(args, int);
+
+						putchar(arg_c);
+						count++;
+						break;
+					}
+				case 's':
+					{
+						char *arg_str = va_arg(args, char *);
+						
+						if (arg_str == NULL)
+						{
+							arg_str = "(null)";
+						}
+						while (*arg_str)
+						{
+							putchar(*arg_str++);
+							count++;
+						}
+						break;
+					}
+				case '%':
+					{
+						putchar('%');
+						count++;
+						break;
+					}
+				default:
+					{
+						putchar('%');
+						putchar(specifier);
+						count += 2;
+						break;
+					}
+			}
+		}
+		else
+		{
+			putchar(c);
+			count++;
+		}
+	}
+	va_end(args);
+	return (count);
+}
