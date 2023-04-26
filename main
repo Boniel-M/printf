@@ -1,8 +1,16 @@
 #include <stdio.h>
+#include "main.h"
 
-int main() {
-    int a = 42;
-    printf("Hello, world!\n");
-    printf("The value of a is %d\n", a);
+int main()
+{
+    char *str = "world";
+    int n = 42;
+    double x = 3.14159;
+    
+    _printf("Hello, %s!\n", str);
+    _printf("The answer is %d.\n", n);
+    _printf("The value of pi is approximately %.2f.\n", x);
+    
     return 0;
 }
+

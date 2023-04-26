@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include "main.h"
 
 int _printf(const char *format, ...)
 {
     va_list args;
+
     int count = 0;
     char c;
 
@@ -14,23 +16,26 @@ int _printf(const char *format, ...)
     {
         if (c == '%')
         {
-            format++;
-
-            switch (*format)
+            char specifier = *format++;
+            switch (specifier)
             {
                 case 'c':
                 {
-                    char ch = (char) va_arg(args, int);
-                    putchar(ch);
+                    char arg_c = (char) va_arg(args, int);
+                    putchar(arg_c);
                     count++;
                     break;
                 }
                 case 's':
                 {
-                    char *str = va_arg(args, char *);
-                    while (*str)
+                    char *arg_str = va_arg(args, char *);
+                    if (arg_str == NULL)
                     {
-                        putchar(*str++);
+                        arg_str = "(null)";
+                    }
+                    while (*arg_str)
+                    {
+                        putchar(*arg_str++);
                         count++;
                     }
                     break;
@@ -39,6 +44,13 @@ int _printf(const char *format, ...)
                 {
                     putchar('%');
                     count++;
+                    break;
+                }
+                default:
+                {
+                    putchar('%');
+                    putchar(specifier);
+                    count += 2;
                     break;
                 }
             }
@@ -51,5 +63,5 @@ int _printf(const char *format, ...)
     }
 
     va_end(args);
-    return count;
+    return (count);
 }
