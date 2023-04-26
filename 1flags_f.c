@@ -1,77 +1,74 @@
-#include <stdio.h>
 #include <stdarg.h>
-#include <limits.h>
+#include "main.h"
+#include <stdio.h>
+/**
+ * print_number - Prints an integer.
+ * @n: The integer to print.
+ */
+void print_number(int n)
+{
+    unsigned int num;
+
+    if (n < 0)
+    {
+        putchar('-');
+        num = -n;
+    }
+    else
+    {
+        num = n;
+    }
+
+    if (num / 10)
+    {
+        print_number(num / 10);
+    }
+
+    putchar((num % 10) + '0');
+}
 
 /**
- * _printf - print formatted output to stdout
- * @format: format string
- * Return: number of characters printed
+ * _printf - Prints a formatted string.
+ * @format: The format string to print.
+ *
+ * Return: The number of characters printed.
  */
 int _printf(const char *format, ...)
 {
+    int len = 0;
     va_list args;
-    int count = 0;
-    char c;
+    const char *p;
+
     va_start(args, format);
 
-    while ((c = *format++))
+    for (p = format; *p; p++)
     {
-        if (c == '%')
+        if (*p == '%')
         {
-            char specifier = *format++;
-            switch (specifier)
+            p++;
+
+            switch (*p)
             {
-                case 'c':
-                {
-                    char arg_c = (char) va_arg(args, int);
-                    putchar(arg_c);
-                    count++;
-                    break;
-                }
-                case 's':
-                {
-                    char *arg_str = va_arg(args, char *);
-                    if (arg_str == NULL)
-                    {
-                        arg_str = "(null)";
-                    }
-                    while (*arg_str)
-                    {
-                        putchar(*arg_str++);
-                        count++;
-                    }
-                    break;
-                }
                 case 'd':
                 case 'i':
-                {
-                    int arg_i = va_arg(args, int);
-                    printf("%d", arg_i);
-                    count++;
+                    print_number(va_arg(args, int));
+                    len++;
                     break;
-                }
-                case '%':
-                {
-                    putchar('%');
-                    count++;
-                    break;
-                }
                 default:
-                {
                     putchar('%');
-                    putchar(specifier);
-                    count += 2;
+                    putchar(*p);
+                    len += 2;
                     break;
-                }
             }
         }
         else
         {
-            putchar(c);
-            count++;
+            putchar(*p);
+            len++;
         }
     }
 
     va_end(args);
-    return count;
+
+    return len;
 }
