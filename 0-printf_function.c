@@ -1,4 +1,6 @@
 #include <stdarg.h>
+#include "common_functions.h"
+#include "main.h"
 #include <stdio.h>
 
 /**
@@ -19,12 +21,12 @@ int print_string(char *str)
 }
 
 /**
- * my_printf - Prints a formatted string.
+ * _printf - Prints a formatted string.
  * @format: The format string to print.
  *
  * Return: The number of characters printed.
  */
-int my_printf(const char *format, ...)
+int _printf(const char *format, ...)
 {
     va_list args;
     int len = 0;
@@ -64,3 +66,4 @@ int my_printf(const char *format, ...)
     va_end(args);
     return len;
 }
+
