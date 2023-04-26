@@ -1,30 +1,44 @@
 #include <stdarg.h>
-#include "main.h"
 #include <stdio.h>
+#include "main.h"
+
+/**
+ * print_string - Prints a string.
+ * @str: The string to print.
+ *
+ * Return: The number of characters printed.
+ */
+int print_string(char *str)
+{
+    int len = 0;
+    while (*str)
+    {
+        putchar(*str++);
+        len++;
+    }
+    return len;
+}
+
 /**
  * print_number - Prints an integer.
  * @n: The integer to print.
+ *
+ * Return: The number of digits printed.
  */
-void print_number(int n)
+int print_number(int n)
 {
-    unsigned int num;
-
+    int len = 0;
     if (n < 0)
     {
         putchar('-');
-        num = -n;
+        len++;
+        n = -n;
     }
-    else
-    {
-        num = n;
-    }
-
-    if (num / 10)
-    {
-        print_number(num / 10);
-    }
-
-    putchar((num % 10) + '0');
+    if (n / 10)
+        len += print_number(n / 10);
+    putchar((n % 10) + '0');
+    len++;
+    return len;
 }
 
 /**
@@ -35,40 +49,37 @@ void print_number(int n)
  */
 int _printf(const char *format, ...)
 {
-    int len = 0;
     va_list args;
-    const char *p;
-
+    int len = 0;
     va_start(args, format);
-
-    for (p = format; *p; p++)
+    while (*format)
     {
-        if (*p == '%')
+        if (*format == '%')
         {
-            p++;
-
-            switch (*p)
+            format++;
+            switch (*format)
             {
+                case 's':
+                    len += print_string(va_arg(args, char *));
+                    break;
                 case 'd':
                 case 'i':
-                    print_number(va_arg(args, int));
-                    len++;
+                    len += print_number(va_arg(args, int));
                     break;
                 default:
                     putchar('%');
-                    putchar(*p);
+                    putchar(*format);
                     len += 2;
                     break;
             }
         }
         else
         {
-            putchar(*p);
+            putchar(*format);
             len++;
         }
+        format++;
     }
-
     va_end(args);
-
     return len;
 }
