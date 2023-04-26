@@ -19,12 +19,12 @@ int print_string(char *str)
 }
 
 /**
- * _printf - Prints a formatted string.
+ * my_printf - Prints a formatted string.
  * @format: The format string to print.
  *
  * Return: The number of characters printed.
  */
-int _printf(const char *format, ...)
+int my_printf(const char *format, ...)
 {
     va_list args;
     int len = 0;
